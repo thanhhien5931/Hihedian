@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Góc bếp măm — Chơi một ván, học một món</title>
+  <meta name="description" content="Mini game nấu ăn của măm: xếp bước nấu phở, pha cà phê sữa đá, đi chợ nấu canh chua. Thắng là mở khóa công thức để nấu ở nhà.">
+  <meta property="og:title" content="Góc bếp măm — Chơi một ván, học một món">
+  <meta property="og:description" content="Ba mini game nấu ăn, ba công thức Việt thật.">
+  <meta property="og:image" content="images/pho.jpg">
+  <meta property="og:locale" content="vi_VN">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="games.css">
+  <script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+  <a class="skip" href="#noi-dung">Bỏ qua tới nội dung</a>
+  <!-- Công thức ở đây là công thức nấu tại nhà, đã giản lược cho dễ theo; định lượng mang tính tham khảo. -->
+
+  <!-- Mẫu heo dùng chung (giống trang chủ) -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="pig" viewBox="0 0 100 100">
+      <path class="pg-skin" d="M25 37 L11 24 L19 50 Z"/>
+      <path class="pg-skin" d="M75 37 L89 24 L81 50 Z"/>
+      <ellipse class="pg-skin" cx="50" cy="50" rx="30" ry="26"/>
+      <circle class="pg-blush" cx="29" cy="58" r="4.6"/>
+      <circle class="pg-blush" cx="71" cy="58" r="4.6"/>
+      <ellipse class="pg-snout" cx="50" cy="60" rx="11.5" ry="7.6"/>
+      <ellipse class="pg-ink" cx="46" cy="60" rx="1.8" ry="2.4"/>
+      <ellipse class="pg-ink" cx="54" cy="60" rx="1.8" ry="2.4"/>
+    </symbol>
+    <symbol id="pig-hat" viewBox="0 0 100 100">
+      <path class="pg-hat" d="M14 35 L50 4 L86 35 Q50 43 14 35 Z"/>
+      <path class="pg-hat-line" d="M50 4 L39 38 M50 4 L61 38 M50 4 L50 39"/>
+    </symbol>
+    <symbol id="pig-chef" viewBox="0 0 100 100">
+      <path class="pg-white" d="M35 24 C25 24 25 9 36 11 C38 1 62 1 64 11 C75 9 75 24 65 24 Z"/>
+      <path class="pg-white" d="M35 22 H65 V30 H35 Z"/>
+    </symbol>
+    <symbol id="pig-face" viewBox="0 0 100 100">
+      <g transform="translate(0 6)"><use href="#pig"/></g>
+      <use href="#pig-hat" transform="translate(0 2)"/>
+      <ellipse class="pg-ink" cx="39" cy="50" rx="3.6" ry="4.2"/>
+      <path class="pg-line" d="M57 50 q4 -4.5 8 0"/>
+      <path class="pg-snout" d="M52 77 q1 7 6 5 q2.5 -2 0 -6"/>
+    </symbol>
+    <symbol id="pig-face-happy" viewBox="0 0 100 100">
+      <path class="pg-line" d="M35 46 q4 -5 8 0 M57 46 q4 -5 8 0 M44 71 q6 4 12 0"/>
+    </symbol>
+  </svg>
+
+  <header class="site-header wrap">
+    <a class="logo" href="index.html" aria-label="măm — về trang chủ">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#pig-face"/></svg>
+      <span>măm</span>
+    </a>
+    <nav class="site-nav" aria-label="Điều hướng chính">
+      <a class="hide-sm" href="index.html">Trang chủ</a>
+      <a class="hide-sm" href="index.html#theo-quan">Theo quận</a>
+      <a class="hide-sm" href="index.html#quan-noi-bat">Quán ngon</a>
+      <a class="btn btn--sm btn--pink" href="games.html" aria-current="page">Góc bếp</a>
+    </nav>
+  </header>
+
+  <main id="noi-dung">
+    <!-- Hero -->
+    <section class="k-hero wrap">
+      <div class="k-hero__text reveal">
+        <p class="kicker">Góc bếp măm</p>
+        <h1 class="k-hero__title">Chơi một ván, <mark style="--c:var(--c-lime)">học một món.</mark></h1>
+        <p class="k-hero__lead">Ba trò chơi nhỏ, ba công thức Việt thật. Thắng ván nào là mở khóa công thức món đó để mang về bếp nhà.</p>
+        <div class="progress" aria-live="polite">
+          <span class="progress__dots" aria-hidden="true">
+            <i data-dot="pho"></i><i data-dot="coffee"></i><i data-dot="canh"></i>
+          </span>
+          <span>Đã mở khóa <strong data-unlocked>0</strong>/3 công thức</span>
+        </div>
+      </div>
+      <div class="k-hero__chef reveal" aria-hidden="true">
+        <span class="say">Vào bếp thôi!</span>
+        <svg viewBox="0 0 100 100">
+          <path class="k-steam" d="M14 30 c-4 -5 4 -8 0 -13 M86 30 c-4 -5 4 -8 0 -13"/>
+          <use href="#pig"/><use href="#pig-chef"/><use href="#pig-face-happy"/>
+          <path class="k-ladle" d="M84 92 L74 60"/>
+          <path class="k-ladle k-ladle__cup" d="M70 60 a6 5 0 0 0 12 -3 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Chọn trò -->
+    <section class="k-picker wrap" aria-labelledby="picker-label">
+      <p class="kicker" id="picker-label">Chọn một trò</p>
+      <ul class="k-picker__grid">
+        <li>
+          <a class="pick" href="#game-pho" style="--c:var(--c-lilac)" data-pick="pho">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <g transform="translate(0 -4)"><use href="#pig"/><use href="#pig-hat"/></g>
+              <path class="pg-line" d="M35 42 q4 -5 8 0 M57 42 q4 -5 8 0 M46 62 v10 M50 63 v10 M54 62 v10 M74 74 L90 30 M80 74 L98 35"/>
+              <path class="pg-white" d="M12 68 H88 A38 26 0 0 1 12 68 Z"/>
+            </svg>
+            <span class="pick__meta">Trò 1 · Xếp bước · Dễ</span>
+            <strong>Nấu phở bò</strong>
+            <span class="pick__desc">Xếp 6 bước nấu theo đúng thứ tự.</span>
+            <span class="pick__status" data-status>Chưa mở khóa</span>
+          </a>
+        </li>
+        <li>
+          <a class="pick" href="#game-coffee" style="--c:var(--c-peach)" data-pick="coffee">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <g transform="translate(-10 0)"><use href="#pig"/><use href="#pig-hat"/></g>
+              <path class="pg-line" d="M25 47 h8 M47 47 h8 M36 72 q4 3 8 0 M68 46 V42 H82 V46 M60 60 H90"/>
+              <path class="pg-white" d="M64 46 H86 V60 H64 Z M62 64 L65 95 H85 L88 64 Z"/>
+            </svg>
+            <span class="pick__meta">Trò 2 · Khéo tay · Vừa</span>
+            <strong>Pha cà phê sữa đá</strong>
+            <span class="pick__desc">Giữ để rót đúng vạch sữa và cà phê.</span>
+            <span class="pick__status" data-status>Chưa mở khóa</span>
+          </a>
+        </li>
+        <li>
+          <a class="pick" href="#game-canh" style="--c:var(--c-mint)" data-pick="canh">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <g transform="translate(0 -4)"><use href="#pig"/><use href="#pig-hat"/></g>
+              <circle class="pg-white" cx="39" cy="42" r="5.2"/><circle class="pg-white" cx="61" cy="42" r="5.2"/>
+              <circle class="pg-ink" cx="39" cy="42" r="2.2"/><circle class="pg-ink" cx="61" cy="42" r="2.2"/>
+              <path class="pg-white" d="M74 82 L90 70 V94 Z M22 82 C34 66 62 66 74 82 C62 98 34 98 22 82 Z"/>
+              <circle class="pg-ink" cx="34" cy="80" r="2.2"/>
+            </svg>
+            <span class="pick__meta">Trò 3 · Đi chợ · Vừa</span>
+            <strong>Đi chợ nấu canh chua</strong>
+            <span class="pick__desc">Chọn đúng 8 nguyên liệu trong 12 món.</span>
+            <span class="pick__status" data-status>Chưa mở khóa</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ========== TRÒ 1: PHỞ ========== -->
+    <section class="game wrap" id="game-pho" style="--c:var(--c-lilac)" data-game="pho" aria-labelledby="pho-title">
+      <div class="game__head">
+        <p class="kicker">Trò 1 · Xếp bước</p>
+        <h2 class="game__title" id="pho-title">Nấu phở bò</h2>
+        <p class="game__how">Bấm vào các bước bên trái theo <strong>đúng thứ tự nấu</strong>. Sai thì heo măm sẽ gợi ý.</p>
+      </div>
+      <div class="game__board">
+        <div class="pho">
+          <div>
+            <p class="game__label">Các bước (đã xáo trộn)</p>
+            <ul class="pho__deck" data-deck></ul>
+          </div>
+          <div>
+            <p class="game__label">Nồi phở của bạn</p>
+            <svg class="pot" viewBox="0 0 120 80" aria-hidden="true">
+              <path class="pot__steam" d="M40 14 c-4 -5 4 -8 0 -13 M60 14 c-4 -5 4 -8 0 -13 M80 14 c-4 -5 4 -8 0 -13"/>
+              <clipPath id="pot-clip"><path d="M16 24 H104 V58 A14 14 0 0 1 90 72 H30 A14 14 0 0 1 16 58 Z"/></clipPath>
+              <rect class="pot__broth" x="16" y="24" width="88" height="48" clip-path="url(#pot-clip)" data-broth/>
+              <path class="pot__body" d="M16 24 H104 V58 A14 14 0 0 1 90 72 H30 A14 14 0 0 1 16 58 Z"/>
+              <path class="pot__body" d="M6 30 H16 M104 30 H114 M12 24 H108"/>
+            </svg>
+            <ol class="pho__slots" data-slots></ol>
+          </div>
+        </div>
+        <aside class="coach" data-coach>
+          <span class="say" data-say aria-live="polite">Bước đầu tiên là gì nhỉ?</span>
+          <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#pig"/><use href="#pig-hat"/><use href="#pig-face-happy"/></svg>
+          <p class="coach__stats">Lần sai: <strong data-mistakes>0</strong></p>
+          <button class="btn btn--sm btn--white" type="button" data-reset>Chơi lại</button>
+        </aside>
+      </div>
+      <article class="recipe is-locked" data-recipe aria-labelledby="pho-recipe">
+        <p class="recipe__lock" data-lock>🔒 Xếp xong 6 bước để mở khóa công thức</p>
+        <div class="recipe__body">
+          <p class="kicker">Công thức đã mở khóa <span class="recipe__stars" data-stars></span></p>
+          <h3 id="pho-recipe">Phở bò <span class="muted">· khoảng 4 tô</span></h3>
+          <div class="recipe__cols">
+            <div>
+              <p class="game__label">Nguyên liệu</p>
+              <ul class="recipe__list">
+                <li>1,5 kg xương ống bò</li>
+                <li>400 g thịt bò (nạm, gầu, thêm thăn để làm tái)</li>
+                <li>500 g bánh phở tươi</li>
+                <li>2 củ hành tây, 1 củ gừng</li>
+                <li>Gia vị phở: 2 thanh quế, 3 hoa hồi, 2 quả thảo quả</li>
+                <li>Nước mắm, đường phèn, muối</li>
+                <li>Hành lá, ngò gai, húng quế, giá, chanh, ớt</li>
+              </ul>
+            </div>
+            <div>
+              <p class="game__label">Cách nấu</p>
+              <ol class="recipe__steps" data-recipe-steps></ol>
+              <p class="recipe__tip"><strong>Mẹo của măm:</strong> hầm lửa nhỏ và hớt bọt thường xuyên thì nước dùng mới trong.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ========== TRÒ 2: CÀ PHÊ ========== -->
+    <section class="game wrap" id="game-coffee" style="--c:var(--c-peach)" data-game="coffee" aria-labelledby="coffee-title">
+      <div class="game__head">
+        <p class="kicker">Trò 2 · Khéo tay</p>
+        <h2 class="game__title" id="coffee-title">Pha cà phê sữa đá</h2>
+        <p class="game__how"><strong>Giữ nút</strong> để rót, thả tay khi chạm vùng vạch đứt. Rót lố là ly bị ngọt hoặc đắng quá đó!</p>
+      </div>
+      <div class="game__board">
+        <div class="coffee">
+          <svg class="glass" viewBox="0 0 120 200" aria-hidden="true">
+            <clipPath id="glass-clip"><path d="M22 12 L32 190 H88 L98 12 Z"/></clipPath>
+            <line class="glass__stream" x1="60" y1="0" x2="60" y2="190" data-stream/>
+            <g clip-path="url(#glass-clip)">
+              <rect class="glass__milk" x="0" width="120" data-milk/>
+              <rect class="glass__coffee" x="0" width="120" data-coffee-layer/>
+              <rect class="glass__band" x="0" width="120" data-band/>
+              <g class="glass__ice" data-ice>
+                <rect x="36" y="40" width="20" height="18" rx="4" transform="rotate(-12 46 49)"/>
+                <rect x="62" y="56" width="20" height="18" rx="4" transform="rotate(10 72 65)"/>
+                <rect x="44" y="76" width="20" height="18" rx="4" transform="rotate(4 54 85)"/>
+              </g>
+            </g>
+            <path class="glass__body" d="M22 12 L32 190 H88 L98 12"/>
+          </svg>
+          <div class="coffee__panel">
+            <ol class="coffee__phases" data-phases>
+              <li data-phase="0">Rót <strong>sữa đặc</strong> ~30 ml</li>
+              <li data-phase="1">Chế <strong>cà phê phin</strong> ~40 ml</li>
+              <li data-phase="2">Thêm <strong>đá</strong> &amp; khuấy đều</li>
+            </ol>
+            <p class="coffee__readout"><span data-readout>0</span> ml</p>
+            <button class="hold" type="button" data-pour>Giữ để rót sữa đặc</button>
+            <button class="btn btn--sm btn--ink" type="button" data-mix hidden>Thêm đá &amp; khuấy</button>
+          </div>
+        </div>
+        <aside class="coach" data-coach>
+          <span class="say" data-say aria-live="polite">Sữa đặc vào ly trước nha!</span>
+          <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#pig"/><use href="#pig-hat"/><use href="#pig-face-happy"/></svg>
+          <p class="coach__stats">Lần rót lố: <strong data-mistakes>0</strong></p>
+          <button class="btn btn--sm btn--white" type="button" data-reset>Chơi lại</button>
+        </aside>
+      </div>
+      <article class="recipe is-locked" data-recipe aria-labelledby="coffee-recipe">
+        <p class="recipe__lock" data-lock>🔒 Pha xong một ly để mở khóa công thức</p>
+        <div class="recipe__body">
+          <p class="kicker">Công thức đã mở khóa <span class="recipe__stars" data-stars></span></p>
+          <h3 id="coffee-recipe">Cà phê sữa đá <span class="muted">· 1 ly</span></h3>
+          <div class="recipe__cols">
+            <div>
+              <p class="game__label">Nguyên liệu</p>
+              <ul class="recipe__list">
+                <li>20–25 g cà phê xay vừa (cho phin)</li>
+                <li>2 thìa canh sữa đặc (~30 ml)</li>
+                <li>Khoảng 60 ml nước sôi</li>
+                <li>Đá viên</li>
+              </ul>
+            </div>
+            <div>
+              <p class="game__label">Cách pha</p>
+              <ol class="recipe__steps">
+                <li>Tráng phin và ly bằng nước sôi cho nóng.</li>
+                <li>Cho cà phê vào phin, gài nắp nén nhẹ, rót khoảng 20 ml nước sôi để ủ 30 giây.</li>
+                <li>Rót phần nước còn lại, đậy nắp, chờ cà phê nhỏ giọt khoảng 4–5 phút.</li>
+                <li>Cho sữa đặc vào ly, chế cà phê vào và khuấy đều.</li>
+                <li>Thêm đá, khuấy thêm vài vòng rồi thưởng thức.</li>
+              </ol>
+              <p class="recipe__tip"><strong>Mẹo của măm:</strong> giọt cà phê rơi đều, chậm là phin đã nén vừa tay.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ========== TRÒ 3: CANH CHUA ========== -->
+    <section class="game wrap" id="game-canh" style="--c:var(--c-mint)" data-game="canh" aria-labelledby="canh-title">
+      <div class="game__head">
+        <p class="kicker">Trò 3 · Đi chợ</p>
+        <h2 class="game__title" id="canh-title">Đi chợ nấu canh chua</h2>
+        <p class="game__how">Nồi canh chua cá cần <strong>8 nguyên liệu</strong>. Bấm để bỏ vào giỏ, coi chừng mấy món "lạc đề"!</p>
+      </div>
+      <div class="game__board">
+        <div class="market">
+          <ul class="market__stall" data-stall></ul>
+          <p class="market__basket">Giỏ đi chợ: <strong data-basket>0</strong>/8</p>
+        </div>
+        <aside class="coach" data-coach>
+          <span class="say" data-say aria-live="polite">Chợ đông quá, chọn lẹ nè!</span>
+          <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#pig"/><use href="#pig-hat"/><use href="#pig-face-happy"/></svg>
+          <p class="coach__stats">Chọn nhầm: <strong data-mistakes>0</strong></p>
+          <button class="btn btn--sm btn--white" type="button" data-reset>Chơi lại</button>
+        </aside>
+      </div>
+      <article class="recipe is-locked" data-recipe aria-labelledby="canh-recipe">
+        <p class="recipe__lock" data-lock>🔒 Gom đủ 8 nguyên liệu để mở khóa công thức</p>
+        <div class="recipe__body">
+          <p class="kicker">Công thức đã mở khóa <span class="recipe__stars" data-stars></span></p>
+          <h3 id="canh-recipe">Canh chua cá <span class="muted">· khoảng 4 người ăn</span></h3>
+          <div class="recipe__cols">
+            <div>
+              <p class="game__label">Nguyên liệu</p>
+              <ul class="recipe__list">
+                <li>500 g cá lóc hoặc cá basa, cắt khúc</li>
+                <li>50 g me chua</li>
+                <li>2 quả cà chua, 1/4 quả thơm (dứa)</li>
+                <li>2 cây bạc hà (dọc mùng), 100 g đậu bắp, 100 g giá</li>
+                <li>Ngò om, ngò gai, tỏi phi, ớt</li>
+                <li>Nước mắm, đường, muối</li>
+              </ul>
+            </div>
+            <div>
+              <p class="game__label">Cách nấu</p>
+              <ol class="recipe__steps">
+                <li>Ngâm me với nước ấm, dầm lấy nước cốt, bỏ hạt.</li>
+                <li>Đun sôi nước, cho nước me, thơm và cà chua vào.</li>
+                <li>Cho cá vào nấu chín, hớt bọt cho nước trong.</li>
+                <li>Nêm nước mắm, đường, muối cho vừa vị chua ngọt.</li>
+                <li>Thêm đậu bắp, bạc hà, giá; sôi lại thì tắt bếp.</li>
+                <li>Rắc ngò om, ngò gai và tỏi phi, ăn kèm cơm trắng.</li>
+              </ol>
+              <p class="recipe__tip"><strong>Mẹo của măm:</strong> cho rau vào sau cùng để rau còn giòn, không bị nhũn.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer on-dark">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div>
+          <a class="logo" href="index.html" aria-label="măm — về trang chủ">
+            <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#pig-face"/></svg>
+            <span>măm</span>
+          </a>
+          <p>Sổ tay ăn uống Sài Gòn. Viết bằng bụng đói và tiền túi, từ năm 2026.</p>
+        </div>
+        <nav aria-labelledby="f-kham-pha">
+          <h2 id="f-kham-pha">Khám phá</h2>
+          <ul>
+            <li><a href="index.html#quan-noi-bat">Quán nổi bật</a></li>
+            <li><a href="index.html#theo-quan">Theo quận</a></li>
+            <li><a href="index.html#bai-viet">Bài viết</a></li>
+            <li><a href="games.html">Góc bếp</a></li>
+          </ul>
+        </nav>
+        <nav aria-labelledby="f-theo-doi">
+          <h2 id="f-theo-doi">Theo dõi</h2>
+          <ul>
+            <li><a href="https://www.instagram.com/hihedian/" target="_blank" rel="noopener" aria-label="Instagram @hihedian (mở tab mới)">Instagram ↗</a></li>
+            <li><a href="https://www.tiktok.com/@hihedian" target="_blank" rel="noopener" aria-label="TikTok @hihedian (mở tab mới)">TikTok ↗</a></li>
+            <li><a href="#">Facebook</a></li>
+          </ul>
+        </nav>
+        <nav aria-labelledby="f-gop-y">
+          <h2 id="f-gop-y">Góp ý</h2>
+          <ul>
+            <li><a href="index.html#goi-y">Gợi ý một quán</a></li>
+            <li><a href="mailto:xinchao@mam.vn">xinchao@mam.vn</a></li>
+            <li><a href="#noi-dung">Lên đầu trang ↑</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer__bar">
+        <span>© <span data-year>2026</span> măm · Quán trên trang này là dữ liệu mẫu.</span>
+        <span>Mẹo: gõ <kbd>m</kbd> <kbd>a</kbd> <kbd>m</kbd> trên bàn phím thử xem.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script src="games.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+﻿{
+    "name":  "mam-saigon",
+    "version":  "1.0.0",
+    "description":  "",
+    "main":  "index.js",
+    "scripts":  {
+                    "screenshot":  "node scripts/screenshot.mjs"
+                },
+    "keywords":  [
+
+                 ],
+    "author":  "",
+    "license":  "ISC",
+    "type":  "commonjs",
+    "devDependencies":  {
+                            "playwright-core":  "^1.48.2"
+                        }
+}

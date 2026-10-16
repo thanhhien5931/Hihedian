@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>măm — “Ăn gì cũng được” thì để heo chọn</title>
+  <meta name="description" content="măm là sổ tay review quán ăn và quán cà phê Sài Gòn theo từng quận: ăn thử thật, tự trả tiền, viết thật lòng. Kèm Góc bếp — chơi mini game để học nấu ăn.">
+  <meta property="og:title" content="măm — “Ăn gì cũng được” thì để heo chọn">
+  <meta property="og:description" content="Sổ tay ăn quán Sài Gòn theo từng quận. Chê là chê, khen là khen.">
+  <meta property="og:image" content="../images/cafe-via-he.jpg">
+  <meta property="og:locale" content="vi_VN">
+  <meta name="theme-color" content="#ffd60a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js')</script>
+  <style>
+    /* ===== Bản "độc lạ": bảng hiệu quán Sài Gòn × neo-brutalism × zine cắt dán ===== */
+    :root {
+      --ink: #141414;
+      --paper: #fff3d6;
+      --paper-2: #ffe9b8;
+      --white: #ffffff;
+      --red: #d21f16;
+      --red-ink: #b3140c;
+      --yellow: #ffd60a;
+      --blue: #1546b8;
+      --green: #19a35b;
+      --pink: #ffb3cf;
+      --snout: #ff8fb5;
+      --hat: #f5d77b;
+      --lilac: #c9b8ff;
+      --night: #15121c;
+
+      --border: 3px solid var(--ink);
+      --shadow: 6px 6px 0 var(--ink);
+      --shadow-lg: 10px 10px 0 var(--ink);
+      --gutter: 16px;
+      --section: 88px;
+      --max: 1320px;
+      --font: "Montserrat", system-ui, sans-serif;
+    }
+    @media (min-width: 768px) { :root { --gutter: 32px; --section: 128px; } }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--ink);
+      background-color: var(--paper);
+      /* Chấm in lưới kiểu tờ zine photocopy */
+      background-image: radial-gradient(rgba(20, 20, 20, .09) 1.2px, transparent 1.4px);
+      background-size: 18px 18px;
+    }
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; }
+    h1, h2, h3, p { margin: 0; }
+    .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
+
+    /* Con trỏ mõm heo (chỉ thiết bị có chuột) */
+    @media (pointer: fine) {
+      html { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'%3E%3Cellipse cx='17' cy='17' rx='14' ry='10.5' fill='%23ff8fb5' stroke='%23141414' stroke-width='2.6'/%3E%3Cellipse cx='12.2' cy='17' rx='2.3' ry='3.4' fill='%23141414'/%3E%3Cellipse cx='21.8' cy='17' rx='2.3' ry='3.4' fill='%23141414'/%3E%3C/svg%3E") 17 17, auto; }
+    }
+
+    :focus-visible { outline: 4px solid var(--blue); outline-offset: 4px; border-radius: 4px; }
+    .on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--yellow); }
+    .skip { position: absolute; left: 12px; top: -80px; z-index: 50; background: var(--yellow); border: var(--border); padding: 10px 16px; font-weight: 800; text-decoration: none; }
+    .skip:focus { top: 12px; }
+
+    /* Heo dùng chung */
+    .pg-skin { fill: var(--pink); stroke: var(--ink); stroke-width: 3.4; stroke-linejoin: round; }
+    .pg-blush { fill: var(--snout); }
+    .pg-snout { fill: var(--snout); stroke: var(--ink); stroke-width: 3.4; }
+    .pg-ink { fill: var(--ink); }
+    .pg-hat { fill: var(--hat); stroke: var(--ink); stroke-width: 3.4; stroke-linejoin: round; }
+    .pg-hat-line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; opacity: .55; }
+    .pg-white { fill: var(--white); stroke: var(--ink); stroke-width: 3.4; stroke-linejoin: round; }
+    .pg-line { fill: none; stroke: var(--ink); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ===== Nút brutal ===== */
+    .btn {
+      --bg: var(--yellow);
+      display: inline-flex; align-items: center; gap: .55em;
+      padding: 16px 24px;
+      background: var(--bg); color: var(--ink);
+      border: var(--border); border-radius: 0;
+      box-shadow: var(--shadow);
+      font: 900 16px/1.1 var(--font); text-transform: uppercase; letter-spacing: .02em;
+      text-decoration: none;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .btn:hover { transform: translate(-2px, -2px) rotate(-1.5deg); box-shadow: 9px 9px 0 var(--ink); }
+    .btn:active { transform: translate(6px, 6px); box-shadow: 0 0 0 var(--ink); }
+    .btn--red { --bg: var(--red); color: var(--white); }
+    .btn--pink { --bg: var(--pink); }
+    .btn--white { --bg: var(--white); }
+    .btn svg { width: 1.15em; height: 1.15em; flex: none; }
+    .btn--sm { padding: 10px 14px; font-size: 13px; box-shadow: 4px 4px 0 var(--ink); }
+
+    /* ===== Marquee chung (luôn nằm trong khung overflow hidden) ===== */
+    .marquee { overflow: hidden; max-width: 100%; }
+    .marquee__track { display: flex; width: max-content; animation: slide var(--speed, 32s) linear infinite; }
+    .marquee__group { display: flex; align-items: center; flex: none; }
+    .marquee--reverse .marquee__track { animation-direction: reverse; }
+    @keyframes slide { to { transform: translateX(-50%); } }
+
+    /* ===== Thanh tin chạy trên cùng ===== */
+    .ticker { background: var(--ink); color: var(--yellow); font: 800 13px/1 var(--font); letter-spacing: .08em; text-transform: uppercase; }
+    .ticker .marquee__group span { padding: 11px 18px; white-space: nowrap; }
+    .ticker .marquee__group b { color: var(--pink); }
+
+    /* ===== Header: bảng hiệu ===== */
+    .site-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 18px; }
+    .logo {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px 8px 8px;
+      background: var(--red); color: var(--white);
+      border: var(--border); box-shadow: 4px 4px 0 var(--ink);
+      font: 900 26px/1 var(--font); letter-spacing: -.03em; text-decoration: none;
+      transform: rotate(-3deg);
+      transition: transform .2s;
+    }
+    .logo:hover { transform: rotate(3deg) scale(1.04); }
+    .logo svg { width: 38px; height: 38px; }
+    .site-nav { display: flex; align-items: center; gap: 10px; }
+    .site-nav a:not(.btn) { font-weight: 800; font-size: 14px; text-decoration: none; padding: 8px 4px; border-bottom: 3px solid transparent; }
+    .site-nav a:not(.btn):hover { border-color: var(--red); }
+    .hide-sm { display: none; }
+    @media (min-width: 900px) { .hide-sm { display: inline-block; } .site-nav { gap: 22px; } }
+
+    /* ===== Hero ===== */
+    .hero { display: grid; gap: 40px; padding-block: 24px 40px; }
+    @media (min-width: 980px) { .hero { grid-template-columns: 1.15fr .85fr; align-items: center; gap: 32px; padding-block: 40px 110px; } }
+    .tag {
+      display: inline-block; padding: 8px 14px;
+      background: var(--white); border: var(--border); box-shadow: 4px 4px 0 var(--ink);
+      font: 800 12.5px/1.2 var(--font); text-transform: uppercase; letter-spacing: .1em;
+      transform: rotate(-2deg);
+    }
+    .tag--dark { background: var(--ink); color: var(--yellow); }
+    .hero__title { position: relative; z-index: 0; margin-top: 26px; font-weight: 900; text-transform: uppercase; line-height: .98; letter-spacing: -.035em; font-size: clamp(3rem, 12.6vw, 7.4rem); }
+    .hero__quote { display: block; text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: .13em; text-wrap: balance; }
+    .hero__answer {
+      position: relative; z-index: -1; display: inline-block; margin-top: 22px; padding: .08em .22em .12em;
+      font-size: .5em; font-style: italic; letter-spacing: -.02em;
+      background: var(--yellow); border: var(--border); box-shadow: var(--shadow);
+      transform: rotate(-2.5deg);
+    }
+    @media (min-width: 980px) { .hero__answer { white-space: nowrap; font-size: .46em; } }
+    .hero__answer em { color: var(--red-ink); font-style: italic; }
+    .lede { margin-top: 34px; max-width: 34em; font-size: 17px; font-weight: 500; text-wrap: pretty; }
+    .lede strong { font-weight: 800; background: linear-gradient(transparent 58%, var(--pink) 58%); }
+    .ctas { display: flex; flex-wrap: wrap; gap: 16px 18px; margin-top: 30px; }
+
+    .hero__art { position: relative; justify-self: center; width: min(100%, 520px); aspect-ratio: 1 / 1.02; }
+    .burst {
+      position: absolute; inset: 4% 2% 10%;
+      border-radius: 50%; border: var(--border);
+      background: repeating-conic-gradient(var(--yellow) 0 10deg, #ffe874 10deg 20deg);
+      box-shadow: var(--shadow-lg);
+    }
+    .bigpig { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; cursor: pointer; }
+    .bigpig:focus-visible { outline: none; }
+    .bigpig:focus-visible .bigpig__body { filter: drop-shadow(0 0 0 var(--blue)) drop-shadow(4px 4px 0 var(--blue)); }
+    .bigpig__body { transform-origin: 50% 90%; transition: transform .2s; }
+    .bigpig.is-jump .bigpig__body { animation: jump .55s cubic-bezier(.3, 1.6, .5, 1); }
+    @keyframes jump { 40% { transform: translateY(-9%) rotate(-6deg) scaleY(1.04); } 70% { transform: translateY(0) scaleY(.94); } }
+    .bubble {
+      position: absolute; right: -2%; top: 2%; max-width: 62%;
+      padding: 12px 16px; background: var(--white); border: var(--border); box-shadow: 4px 4px 0 var(--ink);
+      font: 800 15px/1.3 var(--font); transform: rotate(4deg);
+    }
+    .bubble::after { content: ""; position: absolute; left: 22%; bottom: -16px; width: 22px; height: 16px; background: var(--ink); clip-path: polygon(0 0, 100% 0, 10% 100%); }
+    .sticker {
+      position: absolute; z-index: 2; display: grid; place-items: center; text-align: center;
+      width: 108px; height: 108px; border-radius: 50%; border: var(--border);
+      font: 900 13px/1.1 var(--font); text-transform: uppercase; letter-spacing: .02em;
+      box-shadow: 4px 4px 0 var(--ink); transform: rotate(var(--r, -10deg));
+    }
+    .sticker--a { left: -2%; bottom: 14%; background: var(--green); color: var(--white); --r: -14deg; }
+    .sticker--b { right: -1%; bottom: 3%; width: 96px; height: 96px; background: var(--pink); --r: 12deg; border-radius: 14px; }
+    .sticker b { display: block; font-size: 26px; letter-spacing: -.04em; }
+    @media (max-width: 480px) { .sticker { width: 88px; height: 88px; font-size: 11px; } .sticker b { font-size: 21px; } .sticker--b { width: 80px; height: 80px; } .bubble { font-size: 13px; } }
+
+    /* ===== Hai dải băng chữ khổng lồ bắt chéo ===== */
+    .bands { position: relative; overflow: hidden; padding-block: 34px 46px; }
+    .band { max-width: none; width: 112%; margin-left: -6%; border-block: var(--border); }
+    .band--red { background: var(--red); color: var(--white); transform: rotate(-3.2deg); position: relative; z-index: 1; box-shadow: 0 8px 0 var(--ink); }
+    .band--yellow { background: var(--yellow); transform: rotate(2.4deg); margin-top: -18px; }
+    .band .marquee__group span { padding: 10px 26px; font: 900 clamp(2.4rem, 7.5vw, 6.2rem)/1.12 var(--font); text-transform: uppercase; letter-spacing: -.03em; white-space: nowrap; }
+    .band .marquee__group svg { width: clamp(44px, 6vw, 84px); height: clamp(44px, 6vw, 84px); flex: none; }
+    .band--yellow .marquee__group span { font-style: italic; }
+
+    /* ===== Tiêu đề section ===== */
+    .section { padding-block: var(--section); position: relative; }
+    .kicker {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 7px 12px; background: var(--ink); color: var(--yellow);
+      font: 800 14px/1.1 var(--font); text-transform: uppercase; letter-spacing: .12em;
+    }
+    .kicker span { color: var(--pink); }
+    .h2 { position: relative; z-index: 0; margin-top: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: -.035em; line-height: 1.08; font-size: clamp(2.3rem, 7vw, 5.4rem); text-wrap: balance; }
+    .h2 .hl { position: relative; z-index: -1; display: inline-block; margin-block: .06em .2em; padding: 0 .14em .04em; background: var(--yellow); border: var(--border); box-shadow: 5px 5px 0 var(--ink); transform: rotate(-1.8deg); }
+    .h2 .hl--pink { background: var(--pink); transform: rotate(1.6deg); }
+    .h2 .hl--blue { background: var(--blue); color: var(--white); }
+    .section-head { display: grid; gap: 18px; margin-bottom: 52px; }
+    .section-head p:not(.kicker) { max-width: 38em; font-weight: 500; font-size: 17px; text-wrap: pretty; }
+    @media (min-width: 980px) { .section-head { grid-template-columns: 1.4fr 1fr; align-items: end; gap: 48px; } }
+
+    /* ===== Luật nhà măm ===== */
+    .rules { display: grid; gap: 34px; }
+    @media (min-width: 820px) { .rules { grid-template-columns: repeat(3, 1fr); gap: 30px; } }
+    .rule {
+      position: relative; padding: 46px 26px 28px;
+      background: var(--white); border: var(--border); box-shadow: var(--shadow-lg);
+      rotate: var(--r, 0deg);
+      transition: rotate .2s, transform .2s;
+    }
+    .rule:hover { rotate: 0deg; transform: translateY(-4px); }
+    .rule:nth-child(1) { --r: -1.6deg; }
+    .rule:nth-child(2) { --r: 1.2deg; background: var(--pink); }
+    .rule:nth-child(3) { --r: -.8deg; background: var(--lilac); }
+    @media (min-width: 820px) { .rule:nth-child(2) { margin-top: 44px; } }
+    .rule::before { /* băng keo */
+      content: ""; position: absolute; top: -16px; left: 50%; width: 110px; height: 30px;
+      background: rgba(255, 214, 10, .82); border: 2px solid rgba(20, 20, 20, .35);
+      transform: translateX(-50%) rotate(-4deg);
+    }
+    .rule__no {
+      position: absolute; top: -26px; left: -14px;
+      display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%;
+      background: var(--red); color: var(--white); border: var(--border);
+      font: 900 26px/1 var(--font); transform: rotate(-12deg);
+    }
+    .rule h3 { font: 900 clamp(1.6rem, 3vw, 2.1rem)/1.05 var(--font); text-transform: uppercase; letter-spacing: -.03em; }
+    .rule p { margin-top: 14px; font-weight: 500; text-wrap: pretty; }
+    .rule small { display: block; margin-top: 18px; padding-top: 12px; border-top: 2px dashed var(--ink); font-weight: 700; font-size: 13px; }
+
+    .stamps { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px 26px; margin-top: 70px; }
+    .stamp {
+      display: grid; place-items: center; text-align: center;
+      width: 150px; height: 150px; border-radius: 50%; padding: 14px;
+      color: var(--red-ink); border: 4px solid var(--red-ink);
+      outline: 2px dashed var(--red-ink); outline-offset: -12px;
+      font: 800 12px/1.15 var(--font); text-transform: uppercase; letter-spacing: .06em;
+      transform: rotate(var(--r, -8deg));
+      background: rgba(255, 255, 255, .55);
+    }
+    .stamp strong { display: block; font: 900 40px/1 var(--font); letter-spacing: -.04em; }
+    .stamp:nth-child(2) { --r: 6deg; color: var(--blue); border-color: var(--blue); outline-color: var(--blue); }
+    .stamp:nth-child(3) { --r: -4deg; color: var(--ink); border-color: var(--ink); outline-color: var(--ink); }
+    .stamp:nth-child(4) { --r: 9deg; color: #0d6e3b; border-color: #0d6e3b; outline-color: #0d6e3b; }
+    @media (max-width: 480px) { .stamp { width: 140px; height: 140px; } .stamp strong { font-size: 34px; } }
+
+    /* ===== Theo quận: biển tên đường ===== */
+    .districts { background: var(--blue); color: var(--white); border-block: var(--border); }
+    .districts .kicker { background: var(--yellow); color: var(--ink); }
+    .districts .kicker span { color: var(--red-ink); }
+    .districts .h2 .hl { color: var(--ink); }
+    .signs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 34px 14px; list-style: none; margin: 0; padding: 0; }
+    @media (min-width: 720px) { .signs { grid-template-columns: repeat(4, 1fr); gap: 46px 22px; } }
+    .sign { position: relative; padding-top: 26px; }
+    .sign::before, .sign::after { /* cột treo biển */
+      content: ""; position: absolute; top: 0; width: 6px; height: 30px; background: var(--ink);
+    }
+    .sign::before { left: 22%; } .sign::after { right: 22%; }
+    .sign a {
+      position: relative; display: block; padding: 16px 12px 14px; text-align: center; text-decoration: none;
+      background: #0d2f80; color: var(--white);
+      border: var(--border); box-shadow: 6px 6px 0 var(--ink);
+      outline: 2px solid var(--white); outline-offset: -9px;
+      transform-origin: 50% -26px;
+    }
+    .sign a:hover, .sign a:focus-visible { background: var(--red); }
+    .sign a:focus-visible { outline: 4px solid var(--yellow); outline-offset: 3px; }
+    .sign strong { display: block; font: 900 clamp(1.45rem, 3.4vw, 2.4rem)/1 var(--font); text-transform: uppercase; letter-spacing: -.03em; }
+    .sign span { display: block; margin-top: 6px; font: 700 12.5px/1.2 var(--font); text-transform: uppercase; letter-spacing: .1em; opacity: .92; }
+    .sign--more a { background: var(--yellow); color: var(--ink); outline-color: var(--ink); }
+    .sign--more a:hover { background: var(--pink); }
+
+    .dishes { margin-top: 84px; padding: 28px 20px 30px; background: var(--paper); color: var(--ink); border: var(--border); box-shadow: var(--shadow-lg); }
+    @media (min-width: 768px) { .dishes { padding: 40px 40px 44px; } }
+    .dishes__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; }
+    .dishes__head h3 { font: 900 clamp(1.7rem, 4vw, 2.8rem)/1 var(--font); text-transform: uppercase; letter-spacing: -.03em; }
+    .chips { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 0; padding: 0; list-style: none; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 16px; background: var(--c, var(--white)); border: var(--border); border-radius: 999px;
+      font: 800 15px/1 var(--font); text-decoration: none; box-shadow: 3px 3px 0 var(--ink);
+      rotate: var(--r, 0deg); transition: transform .15s;
+    }
+    .chip:hover { transform: translateY(-3px) scale(1.06); }
+    .chip.is-picked { background: var(--ink); color: var(--yellow); transform: scale(1.12); }
+    .verdict { margin-top: 22px; min-height: 1.6em; font: 800 17px/1.4 var(--font); }
+    .verdict a { color: var(--red-ink); text-underline-offset: 3px; text-decoration-thickness: 2px; }
+
+    /* ===== Quán nổi bật: ảnh cắt dán ===== */
+    .collage { display: grid; gap: 44px 30px; }
+    @media (min-width: 640px) { .collage { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1040px) { .collage { grid-template-columns: repeat(3, 1fr); gap: 56px 36px; } }
+    .spot {
+      position: relative; display: block; padding: 12px 12px 18px; text-decoration: none;
+      background: var(--white); border: var(--border); box-shadow: var(--shadow-lg);
+      rotate: var(--r, 0deg); transition: rotate .2s, transform .2s, box-shadow .2s;
+    }
+    .spot:nth-child(3n+1) { --r: -2deg; }
+    .spot:nth-child(3n+2) { --r: 1.6deg; }
+    .spot:nth-child(3n) { --r: -.6deg; }
+    @media (min-width: 1040px) { .spot:nth-child(3n+2) { margin-top: 48px; } }
+    .spot:hover { rotate: 0deg; transform: translate(-3px, -6px); box-shadow: 16px 16px 0 var(--ink); }
+    .spot::before { content: ""; position: absolute; z-index: 2; top: -14px; left: 18px; width: 88px; height: 26px; background: rgba(255, 179, 207, .85); border: 2px solid rgba(20, 20, 20, .3); transform: rotate(-8deg); }
+    .spot__img { display: block; position: relative; overflow: hidden; border: var(--border); aspect-ratio: 4 / 3; background: var(--paper-2); }
+    .spot__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
+    .spot:hover .spot__img img { transform: scale(1.06) rotate(1deg); }
+    .score {
+      position: absolute; z-index: 3; top: -22px; right: -16px;
+      display: grid; place-items: center; width: 76px; height: 76px; border-radius: 50%;
+      background: var(--yellow); border: var(--border); box-shadow: 4px 4px 0 var(--ink);
+      font: 900 24px/1 var(--font); letter-spacing: -.04em; transform: rotate(10deg);
+    }
+    @media (max-width: 639px) { .score { right: -4px; top: -26px; } }
+    .score small { display: block; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; margin-top: -10px; }
+    .verdict-tag {
+      position: absolute; left: 10px; bottom: 10px;
+      padding: 5px 10px; background: var(--red); color: var(--white); border: 2px solid var(--ink);
+      font: 900 12px/1.1 var(--font); text-transform: uppercase; letter-spacing: .08em; transform: rotate(-3deg);
+    }
+    .spot h3 { margin-top: 16px; font: 900 22px/1.1 var(--font); text-transform: uppercase; letter-spacing: -.02em; }
+    .spot__meta { margin-top: 6px; font: 700 13px/1.4 var(--font); text-transform: uppercase; letter-spacing: .06em; color: #4a4a4a; }
+    .spot blockquote { margin: 12px 0 0; padding-left: 12px; border-left: 4px solid var(--red); font: italic 600 15px/1.45 var(--font); text-wrap: pretty; }
+    .row-end { display: flex; justify-content: center; margin-top: 66px; }
+
+    /* ===== Góc bếp: bảng neon ban đêm ===== */
+    .kitchen { background: var(--night); color: #f4f0ff; border-block: var(--border); overflow: hidden; }
+    .kitchen::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+      background-image: linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+      background-size: 44px 44px; }
+    .kitchen .wrap { position: relative; } .kitchen .kicker { background: var(--pink); color: var(--ink); } .kitchen .kicker span { color: var(--red-ink); }
+    .kitchen__grid { display: grid; gap: 44px; align-items: center; }
+    @media (min-width: 980px) { .kitchen__grid { grid-template-columns: 1fr 1fr; gap: 56px; } }
+    .neon {
+      margin-top: 20px; font: 900 clamp(3.4rem, 13vw, 8.8rem)/.95 var(--font); text-transform: uppercase; letter-spacing: -.03em;
+      color: #ffe3f0;
+      text-shadow: 0 0 6px #ff4fa3, 0 0 18px #ff4fa3, 0 0 42px #ff2b8a;
+    }
+    .neon__sub { display: block; font-size: .36em; letter-spacing: .02em; color: #fff7c2; text-shadow: 0 0 6px #ffd60a, 0 0 22px #ffb800; animation: flicker 4.5s infinite; }
+    @keyframes flicker { 0%, 46%, 50%, 54%, 100% { opacity: 1; } 48%, 52% { opacity: .35; } }
+    .kitchen__lede { margin-top: 26px; max-width: 32em; font-size: 17px; font-weight: 500; color: #e7e1f5; text-wrap: pretty; }
+    .kitchen__lede strong { color: var(--yellow); }
+    .kitchen .ctas { margin-top: 32px; }
+    .kitchen .btn { box-shadow: 6px 6px 0 #ff4fa3; border-color: var(--ink); }
+    .kitchen .btn:hover { box-shadow: 9px 9px 0 #ff4fa3; }
+    .carts { display: grid; gap: 22px; list-style: none; margin: 0; padding: 0; }
+    .cart a {
+      display: grid; grid-template-columns: 76px 1fr auto; align-items: center; gap: 16px;
+      padding: 16px 18px; text-decoration: none; color: var(--ink);
+      background: var(--c); border: var(--border); box-shadow: 6px 6px 0 #000, 6px 6px 0 2px #ff4fa3;
+      rotate: var(--r, 0deg); transition: transform .15s, rotate .15s;
+    }
+    .cart:nth-child(1) a { --c: var(--yellow); --r: -1.4deg; }
+    .cart:nth-child(2) a { --c: #9fd8ff; --r: 1deg; }
+    .cart:nth-child(3) a { --c: #a8ecc4; --r: -.6deg; }
+    .cart a:hover { rotate: 0deg; transform: translateX(8px); }
+    .cart svg { width: 76px; height: 76px; }
+    .cart h3 { font: 900 19px/1.1 var(--font); text-transform: uppercase; letter-spacing: -.02em; }
+    .cart p { margin-top: 4px; font: 600 14px/1.35 var(--font); }
+    .cart__go { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--yellow); font: 900 20px/1 var(--font); }
+    @media (max-width: 420px) { .cart a { grid-template-columns: 56px 1fr; } .cart svg { width: 56px; height: 56px; } .cart__go { display: none; } }
+
+    /* ===== CTA cuối ===== */
+    .finale { padding-bottom: 0; background: var(--yellow); border-bottom: var(--border); text-align: center; overflow: hidden; }
+    .finale__title { font: 900 clamp(3.6rem, 16vw, 12rem)/1.08 var(--font); text-transform: uppercase; letter-spacing: -.05em; }
+    .finale__title span { display: block; color: var(--red); text-shadow: 5px 5px 0 var(--ink); }
+    .finale p { max-width: 30em; margin: 28px auto 0; font-size: 18px; font-weight: 600; text-wrap: balance; }
+    .finale .ctas { justify-content: center; margin-top: 34px; }
+    .pigline { margin-top: 70px; border-top: var(--border); background: var(--pink); }
+    .pigline .marquee__group { gap: 0; }
+    .pigline svg { width: 92px; height: 92px; flex: none; margin: 8px 14px; }
+    .pigline svg:nth-child(odd) { transform: rotate(-10deg) scaleX(-1); }
+    .pigline svg:nth-child(3n) { transform: rotate(14deg) scale(.86); }
+
+    /* ===== Footer ===== */
+    .site-footer { background: var(--ink); color: #f1ece0; padding-block: 56px 32px; }
+    .footer__grid { display: grid; gap: 34px; }
+    @media (min-width: 820px) { .footer__grid { grid-template-columns: 1.3fr 1fr 1fr; } }
+    .site-footer .logo { box-shadow: 4px 4px 0 var(--yellow); }
+    .site-footer p { margin-top: 18px; max-width: 26em; color: #d9d3c6; }
+    .site-footer h2 { font: 800 12px/1 var(--font); text-transform: uppercase; letter-spacing: .14em; color: var(--yellow); }
+    .site-footer ul { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; }
+    .site-footer ul a { font-weight: 700; text-decoration: none; border-bottom: 2px solid transparent; }
+    .site-footer ul a:hover { border-color: var(--pink); }
+    .footer__bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; margin-top: 46px; padding-top: 20px; border-top: 2px dashed #5a564e; font-size: 13px; color: #c9c3b6; }
+    .footer__bar kbd { padding: 1px 6px; border: 2px solid #c9c3b6; border-radius: 4px; font: 800 12px/1.4 var(--font); color: var(--yellow); }
+
+    /* ===== Mưa heo (easter egg) ===== */
+    .pig-rain { position: fixed; inset: 0; z-index: 90; pointer-events: none; overflow: hidden; }
+    .pig-rain svg { position: absolute; top: -140px; animation: fall var(--d, 2.6s) cubic-bezier(.4, .1, .7, 1) forwards; }
+    @keyframes fall { to { transform: translateY(calc(100vh + 180px)) rotate(var(--spin, 360deg)); } }
+    .toast {
+      position: fixed; z-index: 95; left: 50%; bottom: 20px; translate: -50% 0; width: max-content; max-width: calc(100vw - 32px);
+      padding: 14px 18px; background: var(--pink); border: var(--border); box-shadow: var(--shadow);
+      font: 900 15px/1.3 var(--font); text-align: center;
+    }
+
+    /* ===== Lắc khi hover ===== */
+    .wiggle:hover { animation: wiggle .45s ease-in-out; }
+    .sign a:hover { animation: swing .9s ease-in-out; }
+    @keyframes wiggle { 25% { rotate: -4deg; } 50% { rotate: 3deg; } 75% { rotate: -2deg; } }
+    @keyframes swing { 20% { transform: rotate(6deg); } 45% { transform: rotate(-4deg); } 70% { transform: rotate(2deg); } 100% { transform: rotate(0); } }
+
+    /* ===== Reveal khi cuộn ===== */
+    .js .reveal { opacity: 0; translate: 0 36px; transition: opacity .55s ease, translate .55s cubic-bezier(.2, 1.4, .4, 1); }
+    .js .reveal.is-in, .is-screenshot .reveal { opacity: 1; translate: 0 0; }
+    .is-screenshot .reveal { transition: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .marquee__track, .neon__sub { animation: none !important; }
+      .wiggle:hover, .sign a:hover, .bigpig.is-jump .bigpig__body { animation: none !important; }
+      .js .reveal { opacity: 1; translate: none; transition: none; }
+      .btn, .rule, .spot, .chip, .cart a, .logo, .spot__img img { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Toàn bộ quán, số liệu, điểm và lời review trên trang này là DỮ LIỆU MẪU để dựng giao diện, không phải quán có thật. -->
+  <a class="skip" href="#noi-dung">Bỏ qua tới nội dung</a>
+
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="pig" viewBox="0 0 100 100">
+      <path class="pg-skin" d="M25 37 L11 24 L19 50 Z"/>
+      <path class="pg-skin" d="M75 37 L89 24 L81 50 Z"/>
+      <ellipse class="pg-skin" cx="50" cy="50" rx="30" ry="26"/>
+      <circle class="pg-blush" cx="29" cy="58" r="4.6"/>
+      <circle class="pg-blush" cx="71" cy="58" r="4.6"/>
+      <ellipse class="pg-snout" cx="50" cy="60" rx="11.5" ry="7.6"/>
+      <ellipse class="pg-ink" cx="46" cy="60" rx="1.8" ry="2.4"/>
+      <ellipse class="pg-ink" cx="54" cy="60" rx="1.8" ry="2.4"/>
+    </symbol>
+    <symbol id="pig-hat" viewBox="0 0 100 100">
+      <path class="pg-hat" d="M14 35 L50 4 L86 35 Q50 43 14 35 Z"/>
+      <path class="pg-hat-line" d="M50 4 L39 38 M50 4 L61 38 M50 4 L50 39"/>
+    </symbol>
+    <symbol id="pig-chef" viewBox="0 0 100 100">
+      <path class="pg-white" d="M35 24 C25 24 25 9 36 11 C38 1 62 1 64 11 C75 9 75 24 65 24 Z"/>
+      <path class="pg-white" d="M35 22 H65 V30 H35 Z"/>
+    </symbol>
+    <!-- Mặt heo hoàn chỉnh: thân + nón lá + mắt + lưỡi -->
+    <symbol id="pig-face" viewBox="0 0 100 100">
+      <g transform="translate(0 6)"><use href="#pig"/></g>
+      <use href="#pig-hat" transform="translate(0 2)"/>
+      <ellipse class="pg-ink" cx="39" cy="50" rx="3.6" ry="4.2"/>
+      <path class="pg-line" d="M57 50 q4 -4.5 8 0"/>
+      <path class="pg-snout" d="M52 77 q1 7 6 5 q2.5 -2 0 -6"/>
+    </symbol>
+  </svg>
+
+  <!-- Thanh tin chạy -->
+  <div class="ticker marquee" style="--speed:38s" role="note" aria-label="Thông báo từ măm: đang mở cửa, không nhận tiền quảng cáo, chê là chê, khen là khen">
+    <div class="marquee__track" aria-hidden="true">
+      <div class="marquee__group">
+        <span>Đang mở cửa <b>✦</b></span><span>89 quán đã ăn thử <b>✦</b></span><span>Không nhận tiền quảng cáo <b>✦</b></span><span>Chê là chê, khen là khen <b>✦</b></span><span>Ăn bằng tiền túi <b>✦</b></span><span>Ụt ịt <b>✦</b></span>
+      </div>
+      <div class="marquee__group">
+        <span>Đang mở cửa <b>✦</b></span><span>89 quán đã ăn thử <b>✦</b></span><span>Không nhận tiền quảng cáo <b>✦</b></span><span>Chê là chê, khen là khen <b>✦</b></span><span>Ăn bằng tiền túi <b>✦</b></span><span>Ụt ịt <b>✦</b></span>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header wrap">
+    <a class="logo" href="../index.html" aria-label="măm — về trang chủ">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#pig-face"/></svg>
+      <span>măm</span>
+    </a>
+    <nav class="site-nav" aria-label="Điều hướng chính">
+      <a class="hide-sm" href="#luat">Vì sao tin</a>
+      <a class="hide-sm" href="#theo-quan">Theo quận</a>
+      <a class="hide-sm" href="#quan-ngon">Quán ngon</a>
+      <a class="btn btn--sm btn--pink wiggle" href="../games.html">Góc bếp</a>
+    </nav>
+  </header>
+
+  <main id="noi-dung">
+    <!-- HERO -->
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero__copy">
+        <p class="tag">Câu nói nguy hiểm nhất Sài Gòn</p>
+        <h1 class="hero__title" id="hero-title">
+          <span class="hero__quote">“Ăn gì cũng được”</span>
+          <span class="hero__answer">→ để <em>măm</em> chọn!</span>
+        </h1>
+        <p class="lede">măm là sổ tay ăn quán Sài Gòn theo từng quận. Heo đi ăn thật, <strong>tự trả tiền</strong>, về viết <strong>thật lòng</strong> — quán dở thì nói dở, quán ngon thì rủ cả xóm đi.</p>
+        <div class="ctas">
+          <a class="btn btn--red" href="../index.html#quan-noi-bat">
+            Khám phá quán
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>
+          </a>
+          <a class="btn" href="../games.html">
+            Vào Góc bếp
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h18M5 13a7 7 0 0 0 14 0M12 3v4M8 5v2M16 5v2" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero__art">
+        <div class="burst" aria-hidden="true"></div>
+        <!-- Heo măm khổng lồ ngồi ghế nhựa đỏ. Bấm để nghe heo nói (easter egg). -->
+        <svg class="bigpig" data-bigpig viewBox="0 0 200 206" role="button" tabindex="0" aria-label="Heo măm ngồi ghế nhựa đỏ — bấm để nghe heo nói">
+          <g class="bigpig__body">
+            <!-- ghế nhựa đỏ -->
+            <path d="M48 160 L152 160 L144 202 L120 202 L116 180 L84 180 L80 202 L56 202 Z" fill="#d21f16" stroke="#141414" stroke-width="3.4" stroke-linejoin="round"/>
+            <path d="M88 168 h24" stroke="#141414" stroke-width="3" stroke-linecap="round"/>
+            <ellipse cx="100" cy="158" rx="58" ry="10" fill="#ef4a3a" stroke="#141414" stroke-width="3.4"/>
+            <!-- thân -->
+            <ellipse class="pg-skin" cx="100" cy="134" rx="44" ry="30"/>
+            <path class="pg-skin" d="M66 150 q-8 10 2 12 q8 0 8 -10"/>
+            <path class="pg-skin" d="M134 150 q8 10 -2 12 q-8 0 -8 -10"/>
+            <path class="pg-line" d="M140 128 q14 -4 10 8 q-4 8 6 6"/>
+            <!-- đầu -->
+            <path class="pg-skin" d="M52 70 L30 44 L42 92 Z"/>
+            <path class="pg-skin" d="M148 70 L170 44 L158 92 Z"/>
+            <ellipse class="pg-skin" cx="100" cy="88" rx="58" ry="48"/>
+            <circle class="pg-blush" cx="60" cy="102" r="8"/>
+            <circle class="pg-blush" cx="140" cy="102" r="8"/>
+            <ellipse cx="78" cy="80" rx="11" ry="12.5" fill="#fff" stroke="#141414" stroke-width="3.2"/>
+            <ellipse cx="122" cy="80" rx="11" ry="12.5" fill="#fff" stroke="#141414" stroke-width="3.2"/>
+            <g data-pupil><circle cx="78" cy="81" r="5.6" fill="#141414"/><circle cx="80" cy="78.6" r="1.8" fill="#fff"/></g>
+            <g data-pupil><circle cx="122" cy="81" r="5.6" fill="#141414"/><circle cx="124" cy="78.6" r="1.8" fill="#fff"/></g>
+            <ellipse class="pg-snout" cx="100" cy="106" rx="20" ry="13"/>
+            <ellipse class="pg-ink" cx="93" cy="106" rx="3" ry="4.2"/>
+            <ellipse class="pg-ink" cx="107" cy="106" rx="3" ry="4.2"/>
+            <path class="pg-line" d="M86 124 q14 9 28 0"/>
+            <path class="pg-snout" d="M104 127 q2 11 10 8 q4 -3 0 -10"/>
+            <!-- nón lá nghiêng -->
+            <g transform="rotate(-9 100 30)">
+              <path class="pg-hat" d="M30 46 L100 -6 L170 46 Q100 60 30 46 Z"/>
+              <path class="pg-hat-line" d="M100 -6 L80 52 M100 -6 L120 52 M100 -6 L100 54 M100 -6 L62 50 M100 -6 L138 50"/>
+            </g>
+          </g>
+        </svg>
+        <p class="bubble" data-bubble aria-live="polite">Ụt ịt! Bấm tui thử coi.</p>
+        <p class="sticker sticker--a" aria-hidden="true"><span><b>0đ</b>tiền PR</span></p>
+        <p class="sticker sticker--b" aria-hidden="true"><span><b>17</b>quận</span></p>
+      </div>
+    </section>
+
+    <!-- Hai dải băng chữ khổng lồ -->
+    <div class="bands" aria-label="Các món măm hay ăn: phở, bánh mì, cơm tấm, cà phê sữa đá, ốc, hủ tiếu, bún bò, chè" role="img">
+      <div class="band band--red marquee" style="--speed:28s">
+        <div class="marquee__track" aria-hidden="true">
+          <div class="marquee__group">
+            <span>Phở</span><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><span>Bánh mì</span><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><span>Cơm tấm</span><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><span>Cà phê sữa đá</span><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg>
+          </div>
+          <div class="marquee__group">
+            <span>Phở</span><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><span>Bánh mì</span><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><span>Cơm tấm</span><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><span>Cà phê sữa đá</span><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="band band--yellow marquee marquee--reverse" style="--speed:34s">
+        <div class="marquee__track" aria-hidden="true">
+          <div class="marquee__group">
+            <span>Ốc ✦</span><span>Hủ tiếu ✦</span><span>Bún bò ✦</span><span>Chè ✦</span><span>Lẩu ✦</span><span>Dimsum ✦</span>
+          </div>
+          <div class="marquee__group">
+            <span>Ốc ✦</span><span>Hủ tiếu ✦</span><span>Bún bò ✦</span><span>Chè ✦</span><span>Lẩu ✦</span><span>Dimsum ✦</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VÌ SAO TIN MĂM -->
+    <section class="section wrap" id="luat" aria-labelledby="luat-title">
+      <div class="section-head">
+        <div>
+          <p class="kicker"><span>№ 01</span> Vì sao tin măm</p>
+          <h2 class="h2" id="luat-title">Ba điều luật <span class="hl">dán trên tường</span> nhà heo</h2>
+        </div>
+        <p>Không bài PR, không “hợp tác”, không voucher đổi lời khen. Heo chỉ có một cái bụng và một cái ví — cả hai đều thật.</p>
+      </div>
+
+      <div class="rules">
+        <article class="rule reveal">
+          <span class="rule__no" aria-hidden="true">1</span>
+          <h3>Ăn thử thật</h3>
+          <p>Mỗi quán heo ngồi ăn ít nhất hai lần, khác giờ khác ngày. Một lần ngon có thể là may — hai lần mới đáng viết.</p>
+          <small>Hai lần trở lên / quán</small>
+        </article>
+        <article class="rule reveal">
+          <span class="rule__no" aria-hidden="true">2</span>
+          <h3>Tự trả tiền</h3>
+          <p>Không nhận đồ ăn miễn phí, không báo trước cho quán. Hóa đơn bao nhiêu, heo ghi đúng bấy nhiêu.</p>
+          <small>Giá ghi theo bill thật, ví dụ 45.000đ/tô</small>
+        </article>
+        <article class="rule reveal">
+          <span class="rule__no" aria-hidden="true">3</span>
+          <h3>Viết thật lòng</h3>
+          <p>Chỗ nào ngon khen tới nóc, chỗ nào dở nói thẳng — kèm lý do, để bạn tự quyết có đáng đi hay không.</p>
+          <small>Chê có lý, khen có tâm</small>
+        </article>
+      </div>
+
+      <ul class="stamps" aria-label="măm qua những con số (dữ liệu mẫu)" style="list-style:none;padding:0">
+        <li class="stamp reveal"><span><strong>89</strong>quán đã ăn thử</span></li>
+        <li class="stamp reveal"><span><strong>17</strong>quận phủ sóng</span></li>
+        <li class="stamp reveal"><span><strong>11</strong>loại món</span></li>
+        <li class="stamp reveal"><span><strong>100%</strong>tự trả tiền</span></li>
+      </ul>
+    </section>
+
+    <!-- THEO QUẬN + LOẠI MÓN -->
+    <section class="section districts on-dark" id="theo-quan" aria-labelledby="quan-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker"><span>№ 02</span> Khám phá theo quận</p>
+            <h2 class="h2" id="quan-title">Đọc biển tên đường, <span class="hl">ra quán ngon</span></h2>
+          </div>
+          <p>Chọn quận bạn đang đứng — hoặc quận bạn sắp “lạc” tới. Mỗi tấm biển là một xấp review đang chờ.</p>
+        </div>
+
+        <!-- Số quán mỗi quận là dữ liệu mẫu -->
+        <ul class="signs">
+          <li class="sign reveal"><a href="../index.html#theo-quan"><strong>Quận 1</strong><span>24 quán</span></a></li>
+          <li class="sign reveal"><a href="../index.html#theo-quan"><strong>Quận 3</strong><span>18 quán</span></a></li>
+          <li class="sign reveal"><a href="../index.html#theo-quan"><strong>Bình Thạnh</strong><span>15 quán</span></a></li>
+          <li class="sign reveal"><a href="../index.html#theo-quan"><strong>Phú Nhuận</strong><span>12 quán</span></a></li>
+          <li class="sign reveal"><a href="../index.html#theo-quan"><strong>Quận 5</strong><span>11 quán</span></a></li>
+          <li class="sign reveal"><a href="../index.html#theo-quan"><strong>Quận 4</strong><span>Ăn khuya</span></a></li>
+          <li class="sign reveal"><a href="../index.html#theo-quan"><strong>Thủ Đức</strong><span>9 quán</span></a></li>
+          <li class="sign sign--more reveal"><a href="../index.html#theo-quan"><strong>+10 quận</strong><span>Xem hết</span></a></li>
+        </ul>
+
+        <div class="dishes reveal">
+          <div class="dishes__head">
+            <h3>Hay theo loại món?</h3>
+            <button class="btn btn--red btn--sm" type="button" data-pick>Bí quá, heo chọn giùm!</button>
+          </div>
+          <ul class="chips" data-chips>
+            <li><a class="chip" href="../index.html" style="--c:#c9b8ff;--r:-2deg">Món nước</a></li>
+            <li><a class="chip" href="../index.html" style="--c:#e3f56a;--r:1deg">Cơm</a></li>
+            <li><a class="chip" href="../index.html" style="--c:#9fd8ff;--r:-1deg">Món Âu</a></li>
+            <li><a class="chip" href="../index.html" style="--c:#a8ecc4;--r:2deg">Món chay</a></li>
+            <li><a class="chip" href="../index.html" style="--c:#ffc89a;--r:-1.5deg">Cà phê</a></li>
+            <li><a class="chip" href="../index.html" style="--c:#ffb3cf;--r:1deg">Trà sữa</a></li>
+            <li><a class="chip" href="../index.html" style="--c:#fff1a8;--r:-2deg">Bánh mì</a></li>
+            <li><a class="chip" href="../index.html" style="--c:#ff9b8a;--r:1.5deg">Lẩu &amp; nướng</a></li>
+            <li><a class="chip" href="../index.html" style="--c:#9fd8ff;--r:-1deg">Hải sản</a></li>
+            <li><a class="chip" href="../index.html" style="--c:#e6d4ff;--r:2deg">Chè &amp; tráng miệng</a></li>
+            <li><a class="chip" href="../index.html" style="--c:#e3f56a;--r:-1deg">Ăn vặt</a></li>
+          </ul>
+          <p class="verdict" data-verdict aria-live="polite">Không biết ăn gì? Bấm nút đỏ, heo phán liền.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUÁN NỔI BẬT — tên quán, điểm, giá và lời review đều là dữ liệu mẫu -->
+    <section class="section wrap" id="quan-ngon" aria-labelledby="spots-title">
+      <div class="section-head">
+        <div>
+          <p class="kicker"><span>№ 03</span> Quán nổi bật</p>
+          <h2 class="h2" id="spots-title">Mấy quán khiến heo <span class="hl hl--pink">quay lại lần ba</span></h2>
+        </div>
+        <p>Cắt ra từ sổ tay của heo, dán lên đây cho bạn coi. Điểm chấm trên thang 5 — heo khó tính lắm đó.</p>
+      </div>
+
+      <div class="collage">
+        <a class="spot reveal" href="../index.html#quan-noi-bat">
+          <span class="score" aria-label="Điểm 4,7 trên 5">4.7<small>/5</small></span>
+          <span class="spot__img"><img src="../images/ca-phe-sua-da.jpg" alt="Ly cà phê sữa đá trên bàn gỗ" loading="lazy" width="800" height="600"><span class="verdict-tag">Đậm muốn xỉu</span></span>
+          <h3>Phin Góc Phố</h3>
+          <p class="spot__meta">Phú Nhuận · Cà phê · ~30.000đ</p>
+          <blockquote>“Phin nhỏ giọt chậm rì, ngồi đợi mà thấy đời cũng chậm lại theo.”</blockquote>
+        </a>
+        <a class="spot reveal" href="../index.html#quan-noi-bat">
+          <span class="score" aria-label="Điểm 4,5 trên 5">4.5<small>/5</small></span>
+          <span class="spot__img"><img src="../images/mi-xao.jpg" alt="Đĩa mì xào với đôi đũa" loading="lazy" width="800" height="600"><span class="verdict-tag">Ăn khuya</span></span>
+          <h3>Mì Xào Chú Tư</h3>
+          <p class="spot__meta">Quận 5 · Ăn khuya · ~45.000đ</p>
+          <blockquote>“Chảo lửa to, mì giòn rụm. Chú nói nhiều hơn nấu — nhưng nấu ngon.”</blockquote>
+        </a>
+        <a class="spot reveal" href="../index.html#quan-noi-bat">
+          <span class="score" aria-label="Điểm 4,6 trên 5">4.6<small>/5</small></span>
+          <span class="spot__img"><img src="../images/pho.jpg" alt="Tô phở bò nóng với rau thơm" loading="lazy" width="800" height="600"><span class="verdict-tag">Nước trong</span></span>
+          <h3>Phở Sáng Sớm</h3>
+          <p class="spot__meta">Quận 3 · Món nước · ~65.000đ</p>
+          <blockquote>“Nước dùng ngọt xương, không bột ngọt gắt. Tới sau 9 giờ là hết nạm.”</blockquote>
+        </a>
+        <a class="spot reveal" href="../index.html#quan-noi-bat">
+          <span class="score" aria-label="Điểm 4,4 trên 5">4.4<small>/5</small></span>
+          <span class="spot__img"><img src="../images/hai-san.jpg" alt="Mâm hải sản tươi bày trên bàn" loading="lazy" width="800" height="600"><span class="verdict-tag">Đi nhóm</span></span>
+          <h3>Ốc Bờ Kè</h3>
+          <p class="spot__meta">Quận 4 · Hải sản · ~150.000đ</p>
+          <blockquote>“Ốc len xào dừa là chân ái. Ghế nhựa hơi thấp, đầu gối hơi khổ.”</blockquote>
+        </a>
+        <a class="spot reveal" href="../index.html#quan-noi-bat">
+          <span class="score" aria-label="Điểm 4,3 trên 5">4.3<small>/5</small></span>
+          <span class="spot__img"><img src="../images/dimsum.jpg" alt="Xửng dimsum hấp nóng" loading="lazy" width="800" height="600"><span class="verdict-tag">Cuối tuần</span></span>
+          <h3>Dimsum Lầu Hai</h3>
+          <p class="spot__meta">Quận 5 · Ăn sáng · ~120.000đ</p>
+          <blockquote>“Há cảo da mỏng thấy tôm. Chủ nhật xếp hàng, nhưng xếp đáng.”</blockquote>
+        </a>
+        <a class="spot reveal" href="../index.html#quan-noi-bat">
+          <span class="score" aria-label="Điểm 4,8 trên 5">4.8<small>/5</small></span>
+          <span class="spot__img"><img src="../images/cafe-via-he.jpg" alt="Quán cà phê vỉa hè với ghế nhựa thấp" loading="lazy" width="800" height="600"><span class="verdict-tag">Ngồi lì</span></span>
+          <h3>Cà Phê Dưới Me</h3>
+          <p class="spot__meta">Quận 1 · Vỉa hè · ~20.000đ</p>
+          <blockquote>“Ghế nhựa, bóng me, tiếng xe — đúng vị Sài Gòn không cần filter.”</blockquote>
+        </a>
+      </div>
+      <div class="row-end">
+        <a class="btn btn--white" href="../index.html#quan-noi-bat">Xem cả xấp review
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- GÓC BẾP -->
+    <section class="section kitchen on-dark" id="goc-bep" aria-labelledby="bep-title">
+      <div class="wrap kitchen__grid">
+        <div>
+          <p class="kicker"><span>№ 04</span> Góc bếp</p>
+          <h2 class="neon" id="bep-title">Góc bếp <span class="neon__sub">mở cửa tới khuya</span></h2>
+          <p class="kitchen__lede">Chơi một ván, <strong>học một món</strong>. Heo bếp trưởng chấm sao từng lượt — làm sai thì heo giải thích vì sao sai, thắng thì mở khóa công thức nấu tại nhà.</p>
+          <div class="ctas">
+            <a class="btn" href="../games.html">Vào Góc bếp
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>
+            </a>
+          </div>
+        </div>
+        <ul class="carts">
+          <li class="cart reveal">
+            <a href="../games.html#game-pho">
+              <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#pig"/><use href="#pig-chef"/><ellipse class="pg-ink" cx="39" cy="47" rx="3.4" ry="3.8"/><ellipse class="pg-ink" cx="61" cy="47" rx="3.4" ry="3.8"/><path class="pg-white" d="M14 74 H86 A36 22 0 0 1 14 74 Z"/></svg>
+              <span><h3>Nấu phở bò</h3><p>Xếp các bước cho đúng thứ tự.</p></span>
+              <span class="cart__go" aria-hidden="true">→</span>
+            </a>
+          </li>
+          <li class="cart reveal">
+            <a href="../games.html#game-coffee">
+              <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#pig"/><use href="#pig-hat"/><path class="pg-line" d="M35 46 q4 -4 8 0 M57 46 q4 -4 8 0"/><path class="pg-white" d="M60 70 H88 L84 98 H64 Z"/><path d="M62 82 H86 L84 98 H64 Z" fill="#8a5a3c"/></svg>
+              <span><h3>Pha cà phê sữa đá</h3><p>Giữ để rót đúng vạch.</p></span>
+              <span class="cart__go" aria-hidden="true">→</span>
+            </a>
+          </li>
+          <li class="cart reveal">
+            <a href="../games.html#game-canh">
+              <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#pig"/><use href="#pig-hat"/><ellipse class="pg-ink" cx="39" cy="47" rx="3.4" ry="3.8"/><path class="pg-line" d="M57 47 q4 -4 8 0"/><path class="pg-line" d="M12 70 H44 L40 96 H16 Z"/><circle cx="22" cy="68" r="5" fill="#d21f16" stroke="#141414" stroke-width="2.4"/><circle cx="33" cy="66" r="5" fill="#19a35b" stroke="#141414" stroke-width="2.4"/></svg>
+              <span><h3>Đi chợ nấu canh chua</h3><p>Nhặt đúng nguyên liệu vào giỏ.</p></span>
+              <span class="cart__go" aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CTA CUỐI -->
+    <section class="section finale" aria-labelledby="finale-title">
+      <div class="wrap">
+        <p class="kicker"><span>№ 05</span> Hết chữ rồi</p>
+        <h2 class="finale__title" id="finale-title" style="margin-top:26px">Đói rồi? <span>Đi ăn!</span></h2>
+        <p>Mở sổ tay măm, chọn quận, chọn món — phần còn lại để cái bụng lo.</p>
+        <div class="ctas">
+          <a class="btn btn--red" href="../index.html#quan-noi-bat">Khám phá quán
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>
+          </a>
+          <a class="btn btn--white" href="../games.html">Vào Góc bếp</a>
+        </div>
+      </div>
+      <div class="pigline marquee" style="--speed:40s" aria-hidden="true">
+        <div class="marquee__track">
+          <div class="marquee__group">
+            <svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg>
+          </div>
+          <div class="marquee__group">
+            <svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg><svg viewBox="0 0 100 100"><use href="#pig-face"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer on-dark">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div>
+          <a class="logo" href="../index.html" aria-label="măm — về trang chủ">
+            <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#pig-face"/></svg>
+            <span>măm</span>
+          </a>
+          <p>Sổ tay ăn uống Sài Gòn. Viết bằng bụng đói và tiền túi, từ năm 2026.</p>
+        </div>
+        <nav aria-labelledby="f-kham-pha">
+          <h2 id="f-kham-pha">Khám phá</h2>
+          <ul>
+            <li><a href="../index.html#quan-noi-bat">Quán nổi bật</a></li>
+            <li><a href="../index.html#theo-quan">Theo quận</a></li>
+            <li><a href="../index.html#bai-viet">Bài viết</a></li>
+            <li><a href="../games.html">Góc bếp</a></li>
+          </ul>
+        </nav>
+        <nav aria-labelledby="f-lien-he">
+          <h2 id="f-lien-he">Góp ý</h2>
+          <ul>
+            <li><a href="../index.html#goi-y">Gợi ý một quán</a></li>
+            <li><a href="#noi-dung">Lên đầu trang ↑</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer__bar">
+        <span>© 2026 măm · Quán trên trang này là dữ liệu mẫu.</span>
+        <span>Mẹo: gõ <kbd>m</kbd> <kbd>a</kbd> <kbd>m</kbd> trên bàn phím thử xem.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Reveal khi cuộn
+      const items = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window && !reduce) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+        }, { rootMargin: '0px 0px -8% 0px' });
+        items.forEach((el) => io.observe(el));
+      } else {
+        items.forEach((el) => el.classList.add('is-in'));
+      }
+
+      // Heo lớn: mắt nhìn theo con trỏ
+      const pig = document.querySelector('[data-bigpig]');
+      const pupils = pig.querySelectorAll('[data-pupil]');
+      let raf = 0, px = 0, py = 0;
+      if (!reduce && matchMedia('(pointer: fine)').matches) {
+        addEventListener('pointermove', (e) => {
+          px = e.clientX; py = e.clientY;
+          if (raf) return;
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            const r = pig.getBoundingClientRect();
+            if (r.bottom < 0 || r.top > innerHeight) return;
+            const dx = px - (r.left + r.width / 2), dy = py - (r.top + r.height * 0.4);
+            const d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 300) * 4.2;
+            pupils.forEach((p) => p.setAttribute('transform', `translate(${(dx / d * k).toFixed(2)} ${(dy / d * k).toFixed(2)})`));
+          });
+        }, { passive: true });
+      }
+
+      // Heo nói + easter egg: bấm 5 lần thì mưa heo
+      const bubble = document.querySelector('[data-bubble]');
+      const lines = [
+        'Ụt ịt! Đói chưa?', 'Tui ăn 89 quán rồi đó nha.', 'Đừng nói “ăn gì cũng được” nữa!',
+        'Ghế nhựa là ngai vàng của tui.', 'Cà phê sữa đá, ít đá, nhiều tình.', 'Bấm nữa đi… có bất ngờ.',
+      ];
+      let taps = 0;
+      const poke = () => {
+        taps += 1;
+        bubble.textContent = taps >= 5 ? 'Á! Cả họ nhà heo tới rồi!' : lines[(taps - 1) % lines.length];
+        pig.classList.remove('is-jump'); void pig.getBoundingClientRect(); pig.classList.add('is-jump');
+        if (taps === 5) rain();
+      };
+      pig.addEventListener('click', poke);
+      pig.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); poke(); } });
+
+      function toast(msg) {
+        const t = document.createElement('p');
+        t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg;
+        document.body.append(t);
+        setTimeout(() => t.remove(), 2600);
+      }
+
+      let raining = false;
+      function rain() {
+        if (raining) return;
+        if (reduce) { toast('Ụt ịt! Bạn vừa tìm ra trứng phục sinh của măm.'); return; }
+        raining = true;
+        const box = document.createElement('div');
+        box.className = 'pig-rain'; box.setAttribute('aria-hidden', 'true');
+        for (let i = 0; i < 30; i++) {
+          const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          s.setAttribute('viewBox', '0 0 100 100');
+          const size = 48 + Math.random() * 80;
+          s.style.cssText = `left:${Math.random() * 100 - 6}%;width:${size}px;height:${size}px;--d:${(1.8 + Math.random() * 1.8).toFixed(2)}s;--spin:${Math.round(Math.random() * 720 - 360)}deg;animation-delay:${(Math.random() * .9).toFixed(2)}s`;
+          s.innerHTML = '<use href="#pig-face"/>';
+          box.append(s);
+        }
+        document.body.append(box);
+        toast('Ụt ịt! Bạn vừa tìm ra trứng phục sinh của măm.');
+        setTimeout(() => { box.remove(); raining = false; }, 4800);
+      }
+
+      // Gõ "mam" (hoặc "măm") ở bất cứ đâu => mưa heo
+      let typed = '';
+      addEventListener('keydown', (e) => {
+        if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
+        typed = (typed + e.key.toLowerCase().replace('ă', 'a')).slice(-3);
+        if (typed === 'mam') rain();
+      });
+
+      // Heo chọn món giùm
+      const chips = [...document.querySelectorAll('[data-chips] .chip')];
+      const verdict = document.querySelector('[data-verdict]');
+      const pickBtn = document.querySelector('[data-pick]');
+      const sayings = ['Quyết rồi, khỏi cãi.', 'Tin heo đi, không hối hận.', 'Heo đã phán, cả bàn phải nghe.'];
+      let spinning = false;
+      pickBtn.addEventListener('click', () => {
+        if (spinning) return;
+        spinning = true;
+        const final = Math.floor(Math.random() * chips.length);
+        const steps = reduce ? 0 : 8;
+        let i = 0;
+        const tick = () => {
+          chips.forEach((c) => c.classList.remove('is-picked'));
+          const cur = chips[(i) % chips.length];
+          cur.classList.add('is-picked');
+          if (i >= steps && (i % chips.length) === final) {
+            spinning = false;
+            verdict.innerHTML = '';
+            verdict.append(`Heo phán: hôm nay ăn ${cur.textContent.toLowerCase()}! ${sayings[Math.floor(Math.random() * sayings.length)]} `);
+            const a = document.createElement('a');
+            a.href = cur.getAttribute('href'); a.textContent = 'Xem quán →';
+            verdict.append(a);
+            return;
+          }
+          i += 1;
+          setTimeout(tick, 50 + i * 9);
+        };
+        if (reduce) { i = final; }
+        tick();
+      });
+    })();
+  </script>
+</body>
+</html>
